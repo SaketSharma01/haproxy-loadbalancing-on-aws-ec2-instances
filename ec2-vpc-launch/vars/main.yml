@@ -1,0 +1,22 @@
+---
+# vars file for ec2-vpc-launch
+
+vpc_name: "my_vpc"
+region: "ap-south-1"
+vpc_cidr: "172.30.0.0/16"
+subnet_cidr: "172.30.1.0/24"
+igw_name: "my_igw"
+route_name: "my_route"
+key_pair_name: "my_key"
+my_key_pair_dest: "/root/ansible/key.pem"
+sg_name_wb: "my_sg1"
+sg_name_LB: "my_sg2"
+subnet_name: "my_subnet"
+instance_type: "t2.micro"
+image_id: "ami-06a0b4e3b7eb7a300"
+req_packages:
+        - boto
+        - boto3
+        - python36
+
+profile: myprofile
