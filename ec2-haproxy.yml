@@ -1,0 +1,57 @@
+
+- hosts: "tag_name_webserver"
+  tasks:
+         - name: install httpd and php
+           package:
+                   name: "{{ item }}"
+                   state: present
+           loop:
+                   - "httpd"
+                   - "php"
+
+         - name: start httpd
+           service:
+                   name: "httpd"
+                   state: started
+
+         - name: create webpage
+           copy:
+                 dest: "/var/www/html/index.php"
+                 content: |
+                         <pre>
+                         <h1>
+                         <?php
+                         print `/usr/sbin/ifconfig`;
+                         ?>
+                         </h1>
+                         </pre>
+
+- hosts: "tag_name_LB"
+  gather_facts: no
+  tasks:
+          - name: install haproxy
+            package:
+                    name: "haproxy"
+                    state: present
+
+          - name: start HAproxy services
+            service:
+                    name: "haproxy"
+                    state: started
+
+          - name: configure haproxy.cfg
+            template:
+                    src: "haproxy.cfg.j1"
+                    dest: "/etc/haproxy/haproxy.cfg"
+            notify: "restart haproxy services"
+
+  handlers:
+        - name: "restart haproxy services"
+          service:
+                  name: "haproxy"
+                  state: restarted
+                  enabled: yes
+
+
+
+
